@@ -17,6 +17,8 @@ databaseConnection().then(async () => {
 
   app.get("/edit", tasks.editSingleTask)
 
+  app.get("/detail/:id", tasks.showDetailTask)
+
   app.listen(port, (e) => {
     console.log("App listening on port " + port)
   })

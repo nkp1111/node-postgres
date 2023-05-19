@@ -40,7 +40,7 @@ module.exports.deleteSingleTask = async (req, res) => {
   try {
     const result = await Task.destroy({ where: { id } });
     if (result === 1) {
-      res.send({ status: "DELETED", id })
+      res.redirect("/")
     }
     else {
       res.send({ status: "TASK NOT FOUND", id })
@@ -74,7 +74,7 @@ module.exports.editSingleTask = async (req, res) => {
       });
 
     if (result[0] === 1) {
-      res.send({ status: "UPDATED", id })
+      res.redirect(`/detail/${id}`)
     }
     else {
       res.send({ status: "NOT UPDATED", id })
@@ -82,5 +82,26 @@ module.exports.editSingleTask = async (req, res) => {
 
   } catch (error) {
     console.log("delete error\n", error)
+  }
+}
+
+module.exports.showDetailTask = async (req, res) => {
+  const { id } = req.params
+  if (isNaN(id) && isNaN(parseFloat(id))) {
+    res.send({ error: "Please provide a proper value for id e.g. 1" })
+    return
+  }
+  try {
+    const task = await Task.findByPk(id)
+    if (!task) {
+      res.send({ error: "Wrong id provided please check your task id." })
+      return
+    }
+    else {
+      res.send({ status: "DETAIL TASK", task })
+      return
+    }
+  } catch (error) {
+    console.log("detail error\n", error)
   }
 }
