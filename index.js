@@ -15,7 +15,7 @@ databaseConnection().then(async () => {
 
   app.get("/delete/:id", tasks.deleteSingleTask)
 
-  app.get("/edit", tasks.editSingleTask)
+  app.get("/edit/:id", tasks.editSingleTask)
 
   app.get("/detail/:id", tasks.showDetailTask)
 

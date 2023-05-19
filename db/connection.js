@@ -6,17 +6,24 @@ require("dotenv").config()
 // const password = process.env.DATABASE_PASSWORD
 // const port = process.env.DATABASE_PORT
 // const dbName = process.env.DATABASE_NAME
-// 
+
 // const sequelize = new Sequelize(dbName, user, password, {
 //   host: 'localhost',
 //   port: port,
 //   dialect: 'postgres',
-//   dialectModule: require('pg')
+//   dialectModule: require('pg'),
 // });
 
 // in development
 const sequelize = new Sequelize(process.env.POSTGRES_URL, {
-  dialectModule: require('pg')
+  dialectModule: require('pg'),
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  }
 })
 
 const databaseConnection = async () => {

@@ -19,7 +19,7 @@ module.exports.createNewTask = async (req, res) => {
   }
   try {
     const task = await Task.create({ task_name, completed: false });
-    res.send({ status: "NEWLY ADDED TASK", ...task.dataValues })
+    res.redirect(`/detail/${task.id}`)
   } catch (error) {
     console.log("add error\n", error)
   }
@@ -53,7 +53,7 @@ module.exports.deleteSingleTask = async (req, res) => {
 
 module.exports.editSingleTask = async (req, res) => {
   // edit a task complete status from true to false and vice versa
-  const { id } = req.query
+  const { id } = req.params
   if (!id) {
     res.send({ error: "Please send id along with query e.g. /edit?id=1" })
     return
