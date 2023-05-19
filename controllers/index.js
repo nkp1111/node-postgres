@@ -50,12 +50,12 @@ module.exports.deleteSingleTask = async (req, res) => {
   }
 }
 
-
 module.exports.editSingleTask = async (req, res) => {
   // edit a task complete status from true to false and vice versa
+  // params: id - id of task
   const { id } = req.params
   if (!id) {
-    res.send({ error: "Please send id along with query e.g. /edit?id=1" })
+    res.send({ error: "Please send id along with query e.g. /edit/1" })
     return
   }
   if (isNaN(id) && isNaN(parseFloat(id))) {
@@ -86,6 +86,8 @@ module.exports.editSingleTask = async (req, res) => {
 }
 
 module.exports.showDetailTask = async (req, res) => {
+  // show detail of single task
+  // params: id - id of task
   const { id } = req.params
   if (isNaN(id) && isNaN(parseFloat(id))) {
     res.send({ error: "Please provide a proper value for id e.g. 1" })

@@ -5,7 +5,7 @@
 - Show all tasks, "[/](https://node-postgres-rho.vercel.app/)".
 - Create new task, "[/new/:task_name](https://node-postgres-rho.vercel.app/new/this_is_new_task)"
 - Show detail of a single task, "[/detail/:id](https://node-postgres-rho.vercel.app/detail/1)"
-- Update task, "[/edit/:id](https://node-postgres-rho.vercel.app/edit/1)"
+- Update task status(completed or not), "[/edit/:id](https://node-postgres-rho.vercel.app/edit/1)"
 - Delete task, "[/delete/:id](https://node-postgres-rho.vercel.app/delete/1)"
 
 *Note:* The routes with id params uses task id which may lead to blank page if deleted.
