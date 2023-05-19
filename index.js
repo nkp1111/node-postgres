@@ -36,39 +36,58 @@ dbConnection().then(async data => {
     freezeTableName: true,
   });
 
-  const deleteTask = async (id) => {
-    try {
-      await Task.destroy({
-        where: {
-          id
-        }
-      });
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   app.get("/", async (req, res) => {
     // get all tasks from database
     try {
       await sequelize.sync()
       const tasks = await Task.findAll();
-      console.log(tasks)
-      res.send(tasks)
+      res.send({ status: "ALL", ...tasks })
     } catch (error) {
-      console.log(error)
+      console.log("all", error)
     }
   })
 
   app.get("/new/:task_name", async (req, res) => {
+    // create new task 
+    // params task_name : name of the task user wants to add
     const { task_name } = req.params
     try {
       await sequelize.sync()
       const task = await Task.create({ task_name, completed: false });
-      console.log(task.id);
-      res.send(task)
+      res.send({ status: "NEW ADDED", ...task.dataValues })
     } catch (error) {
-      console.log(error)
+      console.log("add error\n", error)
+    }
+  })
+
+  app.get("/delete/:id", async (req, res) => {
+    // delete a task with given id
+    // params: id - id of task
+    const { id } = req.params
+    try {
+      await sequelize.sync()
+      const task = await Task.destroy({ where: { id } });
+      res.send({ status: "DELETED", id })
+    } catch (error) {
+      console.log("delete error\n", error)
+    }
+  })
+
+  app.get("/edit", async (req, res) => {
+    // edit a task complete status from true to false and vice versa
+    const { id } = req.query
+    try {
+      await sequelize.sync()
+      const task = await Task.findByPk(id)
+      const result = await Task.update({ completed: !task.completed },
+        {
+          where: { id }
+        });
+      if (result[0] === 1) res.send({ status: "UPDATED", id })
+      else res.send({ status: "NOT UPDATED", id })
+
+    } catch (error) {
+      console.log("delete error\n", error)
     }
   })
 
