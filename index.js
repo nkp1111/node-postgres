@@ -15,7 +15,7 @@ databaseConnection().then(async () => {
   app.get("/", (req, res) => {
     res.send("Please create new user \n Instructions: \n -'POST' request on route '/user/new' \n -'{username, password}' on request body \n")
   })
-  app.use("/task", taskRouter)
+  app.use("/:userId/task", taskRouter)
   app.use("/user", userRouter)
 
   app.listen(port, (e) => {

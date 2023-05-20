@@ -3,10 +3,11 @@ const router = express.Router()
 
 const {
   userController: {
-    createUser
+    createUser, deleteAllUsers
   }
 } = require("../controllers")
 
 router.put("/new", createUser)
+router.delete("/delete/all", deleteAllUsers)
 
 module.exports = router

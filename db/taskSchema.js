@@ -16,6 +16,10 @@ const Task = sq.define('Task', {
   completed: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 }, {
   // Other model options go here

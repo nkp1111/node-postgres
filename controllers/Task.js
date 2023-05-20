@@ -1,12 +1,15 @@
 const { Task } = require("../db/taskSchema")
+const { User } = require("../db/UserSchema")
 const { sq } = require("../db/connection")
+const { Sequelize } = require('sequelize');
 
 module.exports.getAllTasks = async (req, res) => {
   // get all tasks from database
+  const { userId } = req.params
   try {
     await sq.sync()
-    const tasks = await Task.findAll();
-    res.send({ status: "ALL TASKS", ...tasks })
+    const user = await User.findByPk(+userId, { include: 'tasks' });
+    res.send({ status: "ALL TASKS", user })
   } catch (error) {
     console.log("all", error)
   }
@@ -15,12 +18,15 @@ module.exports.getAllTasks = async (req, res) => {
 module.exports.createNewTask = async (req, res) => {
   // create new task 
   // params task_name : name of the task user wants to add
-  const { task_name } = req.params
+  const { task_name, userId } = req.params
   if (!task_name) {
-    res.send({ error: "Please send a task name along e.g. /new/<task_name>" })
+    res.send({ error: "Please send a task name along e.g. /:userId/task/new/:task_name" })
   }
   try {
-    const task = await Task.create({ task_name, completed: false });
+    const task = await Task.create({ task_name, completed: false, userId: +userId });
+    const user = await User.findByPk(+userId, { include: 'tasks' })
+    user.tasks.push(task)
+    const userUpdated = await user.save()
     res.send({ status: "NEW TASK CREATED", task })
   } catch (error) {
     console.log("add error\n", error)
@@ -30,7 +36,7 @@ module.exports.createNewTask = async (req, res) => {
 module.exports.deleteSingleTask = async (req, res) => {
   // delete a task with given id
   // params: id - id of task
-  const { id } = req.params
+  const { id, userId } = req.params
   if (!id) {
     res.send({ error: "Please send id along with query e.g. /delete/1" })
     return
