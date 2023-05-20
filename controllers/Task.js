@@ -46,13 +46,19 @@ module.exports.deleteSingleTask = async (req, res) => {
     return
   }
   try {
-    const result = await Task.destroy({ where: { id } });
-    if (result === 1) {
+    const user = await User.findByPk(userId, { include: "tasks" });
+    const newTasks = user.tasks.filter(task => task.id !== +id)
+
+    if (newTasks.length + 1 === user.tasks.length) {
+      const task = await Task.findByPk(+id);
+      await task.destroy();
+      user.tasks = newTasks
+      await user.save()
       res.send({ status: "TASK DELETED", id })
+      return
     }
-    else {
-      res.send({ status: "TASK NOT FOUND", id })
-    }
+    res.send({ status: "TASK NOT FOUND", id })
+    return
   } catch (error) {
     console.log("delete error\n", error)
   }
