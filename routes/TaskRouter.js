@@ -1,16 +1,16 @@
 const express = require("express")
+const router = express.Router()
 
 const tasks = require("../controllers")
 
-const router = express.Router()
 
 router.get("/", tasks.getAllTasks)
 
-router.get("/new/:task_name", tasks.createNewTask)
+router.put("/new/:task_name", tasks.createNewTask)
 
-router.get("/delete/:id", tasks.deleteSingleTask)
+router.delete("/delete/:id", tasks.deleteSingleTask)
 
-router.get("/edit/:id", tasks.editSingleTask)
+router.patch("/edit/:id", tasks.editSingleTask)
 
 router.get("/detail/:id", tasks.showDetailTask)
 

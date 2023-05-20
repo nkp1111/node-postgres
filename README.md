@@ -2,11 +2,11 @@
 
 - Simple todo list.
 - Built with node and postgres.
-- Show all tasks, "[/task/](https://node-postgres-rho.vercel.app/)".
-- Create new task, "[/task/new/:task_name](https://node-postgres-rho.vercel.app/new/this_is_new_task)"
-- Show detail of a single task, "[/task/detail/:id](https://node-postgres-rho.vercel.app/detail/1)"
-- Update task status(completed or not), "[/task/edit/:id](https://node-postgres-rho.vercel.app/edit/1)"
-- Delete task, "[/task/delete/:id](https://node-postgres-rho.vercel.app/delete/1)"
+- Show all tasks, "GET /task".
+- Create new task, "PUT /task/new/:task_name"
+- Show detail of a single task, "GET /task/detail/:id"
+- Update task status(completed or not), "PATCH /task/edit/:id"
+- Delete task, "DELETE /task/delete/:id"
 
 *Note:* The routes with id params uses task id which may lead to blank page if deleted.
 

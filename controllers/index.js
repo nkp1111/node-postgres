@@ -19,7 +19,7 @@ module.exports.createNewTask = async (req, res) => {
   }
   try {
     const task = await Task.create({ task_name, completed: false });
-    res.redirect(`/task/detail/${task.id}`)
+    res.send({ status: "NEW TASK CREATED", task })
   } catch (error) {
     console.log("add error\n", error)
   }
@@ -40,7 +40,7 @@ module.exports.deleteSingleTask = async (req, res) => {
   try {
     const result = await Task.destroy({ where: { id } });
     if (result === 1) {
-      res.redirect("/task/")
+      res.send({ status: "TASK DELETED", id })
     }
     else {
       res.send({ status: "TASK NOT FOUND", id })
@@ -74,7 +74,7 @@ module.exports.editSingleTask = async (req, res) => {
       });
 
     if (result[0] === 1) {
-      res.redirect(`/task/detail/${id}`)
+      res.send({ status: "UPDATED", id })
     }
     else {
       res.send({ status: "NOT UPDATED", id })
