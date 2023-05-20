@@ -1,7 +1,6 @@
 const { Task } = require("../db/taskSchema")
 const { User } = require("../db/UserSchema")
 const { sq } = require("../db/connection")
-const { Sequelize } = require('sequelize');
 
 module.exports.getAllTasks = async (req, res) => {
   // get all tasks from database
@@ -67,7 +66,7 @@ module.exports.deleteSingleTask = async (req, res) => {
 module.exports.editSingleTask = async (req, res) => {
   // edit a task complete status from true to false and vice versa
   // params: id - id of task
-  const { id } = req.params
+  const { id, userId } = req.params
   if (!id) {
     res.send({ error: "Please send id along with query e.g. /edit/1" })
     return
@@ -78,7 +77,7 @@ module.exports.editSingleTask = async (req, res) => {
   }
   try {
     const task = await Task.findByPk(id)
-    if (!task) {
+    if (!task || task.userId !== +userId) {
       res.send({ error: "Wrong id provided please check your task id." })
       return
     }
@@ -102,14 +101,14 @@ module.exports.editSingleTask = async (req, res) => {
 module.exports.showDetailTask = async (req, res) => {
   // show detail of single task
   // params: id - id of task
-  const { id } = req.params
+  const { id, userId } = req.params
   if (isNaN(id) && isNaN(parseFloat(id))) {
     res.send({ error: "Please provide a proper value for id e.g. 1" })
     return
   }
   try {
     const task = await Task.findByPk(id)
-    if (!task) {
+    if (!task || task.userId !== +userId) {
       res.send({ error: "Wrong id provided please check your task id." })
       return
     }
