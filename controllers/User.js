@@ -23,7 +23,7 @@ module.exports.createUser = async (req, res) => {
       password
     })
 
-    res.send({ status: "NEW USER CREATED", user })
+    res.send({ success: "NEW USER CREATED", user })
   } catch (error) {
     console.log(error)
   }
@@ -31,10 +31,17 @@ module.exports.createUser = async (req, res) => {
 
 module.exports.deleteAllUsers = async (req, res) => {
   // delete all tasks
-  try {
-    await sq.query('DROP TABLE IF EXISTS "User" CASCADE')
-    res.send({ status: "ALL USER DELETED" })
-  } catch (error) {
-    console.log(error)
+  const isAdmin = false
+  if (isAdmin) {
+    try {
+      await sq.query('DROP TABLE IF EXISTS "User" CASCADE')
+      res.send({ success: "ALL USER DELETED" })
+      return
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    res.send({ error: "Permission denied" })
   }
+
 }

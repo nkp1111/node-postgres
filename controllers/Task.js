@@ -8,7 +8,7 @@ module.exports.getAllTasks = async (req, res) => {
   try {
     await sq.sync()
     const user = await User.findByPk(+userId, { include: 'tasks' });
-    res.send({ status: "ALL TASKS", user })
+    res.send({ user })
   } catch (error) {
     console.log("all", error)
   }
@@ -26,7 +26,7 @@ module.exports.createNewTask = async (req, res) => {
     const user = await User.findByPk(+userId, { include: 'tasks' })
     user.tasks.push(task)
     const userUpdated = await user.save()
-    res.send({ status: "NEW TASK CREATED", task })
+    res.send({ success: "New task created", task })
   } catch (error) {
     console.log("add error\n", error)
   }
@@ -53,10 +53,10 @@ module.exports.deleteSingleTask = async (req, res) => {
       await task.destroy();
       user.tasks = newTasks
       await user.save()
-      res.send({ status: "TASK DELETED", id })
+      res.send({ success: "Task deleted", id })
       return
     }
-    res.send({ status: "TASK NOT FOUND", id })
+    res.send({ error: "Task not found", id })
     return
   } catch (error) {
     console.log("delete error\n", error)
@@ -87,10 +87,10 @@ module.exports.editSingleTask = async (req, res) => {
       });
 
     if (result[0] === 1) {
-      res.send({ status: "UPDATED", id })
+      res.send({ success: "Task Updated", id })
     }
     else {
-      res.send({ status: "NOT UPDATED", id })
+      res.send({ error: "Task Not Updated", id })
     }
 
   } catch (error) {
@@ -113,7 +113,7 @@ module.exports.showDetailTask = async (req, res) => {
       return
     }
     else {
-      res.send({ status: "DETAIL TASK", task })
+      res.send({ task })
       return
     }
   } catch (error) {
@@ -123,10 +123,15 @@ module.exports.showDetailTask = async (req, res) => {
 
 module.exports.deleteAllTasks = async (req, res) => {
   // delete all tasks
-  try {
-    await Task.drop()
-    res.send({ status: "ALL TASK DELETED" })
-  } catch (error) {
-    console.log(error)
+  const isAdmin = false
+  if (isAdmin) {
+    try {
+      await Task.drop()
+      res.send({ success: "ALL TASK DELETED" })
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    res.send({ error: "Permission denied" })
   }
 }
