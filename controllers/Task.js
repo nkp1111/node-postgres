@@ -1,8 +1,10 @@
 const { Task } = require("../db/taskSchema")
+const { sq } = require("../db/connection")
 
 module.exports.getAllTasks = async (req, res) => {
   // get all tasks from database
   try {
+    await sq.sync()
     const tasks = await Task.findAll();
     res.send({ status: "ALL TASKS", ...tasks })
   } catch (error) {
@@ -105,5 +107,15 @@ module.exports.showDetailTask = async (req, res) => {
     }
   } catch (error) {
     console.log("detail error\n", error)
+  }
+}
+
+module.exports.deleteAllTasks = async (req, res) => {
+  // delete all tasks
+  try {
+    await Task.drop()
+    res.send({ status: "ALL TASK DELETED" })
+  } catch (error) {
+    console.log(error)
   }
 }

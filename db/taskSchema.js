@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize")
 
 const { sq } = require("./connection")
 
-module.exports.Task = sq.define('Task', {
+const Task = sq.define('Task', {
   // Model attributes are defined here
   id: {
     type: DataTypes.INTEGER,
@@ -20,4 +20,6 @@ module.exports.Task = sq.define('Task', {
 }, {
   // Other model options go here
   freezeTableName: true,
-});
+})
+
+module.exports = { Task }

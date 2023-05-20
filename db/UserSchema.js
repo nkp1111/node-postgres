@@ -1,8 +1,9 @@
 const { DataTypes } = require("sequelize")
 
 const { sq } = require("./connection")
+const { Task } = require("./taskSchema")
 
-module.exports.User = sq.define('User', {
+const User = sq.define('User', {
   // Model attributes are defined here
   id: {
     type: DataTypes.INTEGER,
@@ -17,9 +18,21 @@ module.exports.User = sq.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
 }, {
   // Other model options go here
   timestamps: false,
   freezeTableName: true,
-});
+})
+
+// connects userSchema with taskSchema
+User.hasMany(Task, {
+  foreignKey: "userId",
+  as: "tasks"
+})
+
+Task.belongsTo(User, {
+  foreignKey: "userId"
+})
+
+module.exports = { User }
