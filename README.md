@@ -1,14 +1,16 @@
 # Todo list with express and Postgres
 
 - Simple todo list.
-- Built with node and postgres.
-- Show all tasks, "GET /task".
-- Create new task, "PUT /task/new/:task_name"
-- Show detail of a single task, "GET /task/detail/:id"
-- Update task status(completed or not), "PATCH /task/edit/:id"
-- Delete task, "DELETE /task/delete/:id"
+- Built with node and postgres using sequelize.
+- Allow user creation, "PUT /user/new", {username, password} on request body.
+- Allow user to create a todo list.
+- Show all tasks, "GET /:id/task".
+- Create new task, "PUT /:id/task/new/:task_name"
+- Show detail of a single task, "GET /:id/task/detail/:taskId"
+- Update task status(completed or not), "PATCH /:id/task/edit/:taskId"
+- Delete task, "DELETE /:id/task/delete/:taskId"
 
-*Note:* The routes with id params uses task id which may lead to blank page if deleted.
+*Note:* id is user id and taskId is id for different tasks created by user.
 
 ## Links
 
